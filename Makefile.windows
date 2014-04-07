@@ -1,0 +1,62 @@
+CFLAGS= -DDEBUG -I/usr/local/mingw32/include -I/usr/local/mingw32/include/SDL -D_GNU_SOURCE=1 -DWINDOWS  -DLSB_FIRST -DEXECZ80
+LDFLAGS= -Dmain=SDL_main -mwindows -lmingw32 -luser32 -lgdi32 -lwinmm -ldxguid -lSDLmain -lSDL -lSDL_image
+
+OBJS= y.tab.o emu.o app.o Z80.o fm.o sn76496.o snd.o sndp.o main.o vt100.o async.o fifo.o lex.yy.o Debug.o link.o
+
+z80.exe: ${OBJS}
+	mingw.sh ${OBJS} ${LDFLAGS} -o z80.exe
+
+Debug.o: Debug.c
+	mingw.sh -c Debug.c ${CFLAGS}
+
+Z80.o: Z80.c
+	mingw.sh -c Z80.c ${CFLAGS}
+
+app.o: app.c
+	mingw.sh -c app.c ${CFLAGS}
+
+async.o: async.c
+	mingw.sh -c async.c ${CFLAGS}
+
+emu.o: emu.c
+	mingw.sh -c emu.c ${CFLAGS}
+
+fifo.o: fifo.c
+	mingw.sh -c fifo.c ${CFLAGS}
+
+fm.o: fm.c
+	mingw.sh -c fm.c ${CFLAGS}
+
+main.o: main.c
+	mingw.sh -c main.c ${CFLAGS}
+
+sn76496.o: sn76496.c
+	mingw.sh -c sn76496.c ${CFLAGS}
+
+snd.o: snd.c
+	mingw.sh -c snd.c ${CFLAGS}
+
+sndp.o: sndp.c
+	mingw.sh -c sndp.c ${CFLAGS}
+
+vt100.o: vt100.c
+	mingw.sh -c vt100.c ${CFLAGS}
+
+link.o: link.c
+	mingw.sh -c link.c ${CFLAGS}
+
+y.tab.o: y.tab.c
+	mingw.sh -c y.tab.c ${CFLAGS}
+
+lex.yy.o: lex.yy.c
+	mingw.sh -c lex.yy.c ${CFLAGS}
+
+y.tab.c y.tab.h: lang.y
+	yacc -d lang.y
+
+lex.yy.c: lang.l y.tab.h
+	lex lang.l
+
+clean:
+	rm -f ${OBJS} z80 z80.core y.tab.c y.tab.h lex.yy.c
+

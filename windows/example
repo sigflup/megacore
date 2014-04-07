@@ -1,0 +1,13 @@
+// LOAD VGM DRIVER INTO Z80 MEMORY //
+load "prog.z80" 0
+68k
+// LOAD TRACK INTO 68k MEMORY //
+load "track.vgm" 0
+z80
+// START PROCESSING //
+cont
+// LOAD TRACK ADDRESS, 0x000000 //
+poke 0x0fff:0x00,0x00,0x00,0x00
+wait
+// INIT =1, PLAY = 1
+poke 0x1003:01,01
